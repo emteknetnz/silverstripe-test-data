@@ -1,0 +1,20 @@
+{
+    "name": "emteknetnz/silverstripe-test-data",
+    "type": "silverstripe-vendormodule",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "emteknetnz\\TestData\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Steve Boyd",
+            "email": "emteknetnz@gmail.com"
+        }
+    ],
+    "require": {
+        "silverstripe/framework": "^4 || ^5",
+        "dnadesign/silverstripe-elemental": "^4 || ^5"
+    }
+}
