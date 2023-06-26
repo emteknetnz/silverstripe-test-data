@@ -10,31 +10,68 @@ use SilverStripe\ORM\DB;
 
 class CreateDataTask extends BuildTask
 {
-    // very noticable degredation in performance when increasing from 500 to 1000
-    const PAGES = 500;
-    const BLOCK_AS = 10;
+    const NUM_PAGE_LEVELS = 1;
+
+    // 1 PAGE_LEVELS
+    const PAGES = 1000;
+
+    // 2 PAGE_LEVELS
+    const PAGES_01 = 100;
+    const PAGES_02 = 10;
+
+    // this is about the average number of blocks for projects
+    const BLOCK_AS = 5;
 
     private static $segment = 'CreateDataTask';
 
     public function run($request)
     {
         $this->deleteStuff();
-        $this->createStuff();
+        if (self::NUM_PAGE_LEVELS == 1) {
+            $this->createStuffNumPageLevelsOne();
+        } elseif (self::NUM_PAGE_LEVELS == 2) {
+            $this->createStuffNumPageLevelsTwo();
+        }
     }
 
-    private function createStuff()
+    private function createStuffNumPageLevelsOne()
     {
         for ($i = 0; $i < self::PAGES; $i++) {
-            $pageA = PageA::create();
-            $pageA->Title = "Page A $i";
-            $pageA->write();
-            $elementalAreaID = $pageA->ElementalAreaID;
+            $pageA01 = PageA::create();
+            $pageA01->Title = "Page A 01 $i";
+            $pageA01->write();
+            $elementalAreaID = $pageA01->ElementalAreaID;
             for ($j = 0; $j < self::BLOCK_AS; $j++) {
                 $blockA = BlockA::create();
                 $blockA->Title = "Block A $i $j";
                 $blockA->Content = Util::loremIpsum();
                 $blockA->ParentID = $elementalAreaID;
                 $blockA->write();
+            }
+            // greatly slows down task
+            // $pageA->publishRecursive();
+        }
+    }
+
+    private function createStuffNumPageLevelsTwo()
+    {
+        for ($i = 0; $i < self::PAGES_01; $i++) {
+            $pageA01 = PageA::create();
+            $pageA01->Title = "Page A 01 $i";
+            $pageA01->write();
+            for ($j = 0; $j < self::PAGES_02; $j++) {
+                $pageA02 = PageA::create();
+                $pageA02->Title = "Page A 02 $i $j";
+                $pageA02->ParentID = $pageA01->ID;
+                $pageA02->write();
+                $elementalAreaID = $pageA02->ElementalAreaID;
+                for ($k = 0; $k < self::BLOCK_AS; $k++) {
+                    $blockA = BlockA::create();
+                    $blockA->Title = "Block A $i $j $k";
+                    $blockA->Content = Util::loremIpsum();
+                    $blockA->ParentID = $elementalAreaID;
+                    $blockA->write();
+                }
             }
             // greatly slows down task
             // $pageA->publishRecursive();
