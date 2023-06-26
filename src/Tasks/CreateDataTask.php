@@ -83,7 +83,7 @@ class CreateDataTask extends BuildTask
      */
     private function deleteStuff()
     {
-        foreach (['', '_Live'] as $suffix) {
+        foreach (['', '_Live', '_Versions'] as $suffix) {
             foreach ([
                 // generic tables
                 'SiteTree',
