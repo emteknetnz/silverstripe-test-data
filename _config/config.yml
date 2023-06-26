@@ -1,0 +1,6 @@
+---
+Name: silverstripetestdata
+---
+emteknetnz\TestData\Pages\PageA:
+  extensions:
+    - DNADesign\Elemental\Extensions\ElementalPageExtension
